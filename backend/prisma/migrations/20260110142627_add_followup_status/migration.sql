@@ -1,0 +1,5 @@
+-- CreateEnum
+CREATE TYPE "FollowUpStatus" AS ENUM ('PENDING', 'SCHEDULE_AFTER_2_DAYS', 'COMPLETED', 'NOT_NEGOTIABLE', 'INTERESTED', 'FOLLOW_UP_LATER', 'NOT_RESPONDING');
+
+-- AlterTable
+ALTER TABLE "leads" ADD COLUMN     "followUpStatus" "FollowUpStatus";

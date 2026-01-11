@@ -1,0 +1,55 @@
+import { FollowUpStatus, LeadStatus } from '../../types';
+
+export const formatFollowUpDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  
+  if (date >= today && date < tomorrow) {
+    return 'Today';
+  }
+  const month = date.toLocaleString('default', { month: 'short' });
+  const day = date.getDate();
+  return `${month} ${day}`;
+};
+
+export const formatDateTime = (dateString: string) => {
+  const date = new Date(dateString);
+  const month = date.toLocaleString('default', { month: 'short' });
+  const day = date.getDate();
+  const time = date.toLocaleTimeString('en-US', { 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    hour12: true 
+  }).toLowerCase();
+  return `${month} ${day}, ${time}`;
+};
+
+export const getFollowUpStatusLabel = (status?: FollowUpStatus) => {
+  if (!status) return 'Pending';
+  const labels: Record<FollowUpStatus, string> = {
+    [FollowUpStatus.PENDING]: 'Pending',
+    [FollowUpStatus.SCHEDULE_AFTER_2_DAYS]: 'Schedule After 2 Days',
+    [FollowUpStatus.COMPLETED]: 'Completed',
+    [FollowUpStatus.NOT_NEGOTIABLE]: 'Not Negotiable',
+    [FollowUpStatus.INTERESTED]: 'Interested',
+    [FollowUpStatus.FOLLOW_UP_LATER]: 'Follow Up Later',
+    [FollowUpStatus.NOT_RESPONDING]: 'Not Responding',
+    [FollowUpStatus.SITE_VISIT_DONE]: 'Site Visit Done',
+  };
+  return labels[status] || 'Pending';
+};
+
+export const getLeadStatusLabel = (status: LeadStatus) => {
+  const labels: Record<LeadStatus, string> = {
+    [LeadStatus.NEW]: 'New',
+    [LeadStatus.CONTACTED]: 'Contacted',
+    [LeadStatus.SITE_VISIT_DONE]: 'Site Visit Done',
+    [LeadStatus.NEGOTIATION]: 'Negotiation',
+    [LeadStatus.CLOSED]: 'Closed',
+    [LeadStatus.LOST]: 'Lost',
+  };
+  return labels[status] || status;
+};

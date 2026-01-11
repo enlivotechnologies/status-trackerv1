@@ -1,0 +1,118 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  AGENT
+  ADMIN
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  SITE_VISIT_DONE
+  NEGOTIATION
+  CLOSED
+  LOST
+}
+
+enum LeadSource {
+  CALL
+  WHATSAPP
+  PORTAL
+  WALK_IN
+}
+
+enum WorkStatus {
+  PENDING
+  COMPLETED
+}
+
+enum FollowUpStatus {
+  PENDING
+  SCHEDULE_AFTER_2_DAYS
+  COMPLETED
+  NOT_NEGOTIABLE
+  INTERESTED
+  FOLLOW_UP_LATER
+  NOT_RESPONDING
+  SITE_VISIT_DONE
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      UserRole @default(AGENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  leads     Lead[]
+  works     Work[]
+
+  @@map("users")
+}
+
+model Lead {
+  id            String         @id @default(uuid())
+  name          String
+  phone         String
+  project       String?
+  location      String?
+  source        LeadSource
+  status        LeadStatus     @default(NEW)
+  followUpDate  DateTime       // Mandatory - no lead without follow-up date
+  followUpStatus FollowUpStatus? // Follow-up status for tracking
+  assignedToId  String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  // Relations
+  assignedTo    User        @relation(fields: [assignedToId], references: [id], onDelete: Cascade)
+  notes         Note[]
+  works         Work[]
+
+  @@map("leads")
+}
+
+model Note {
+  id        String   @id @default(uuid())
+  content   String
+  leadId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@map("notes")
+}
+
+model Work {
+  id          String     @id @default(uuid())
+  leadId      String
+  title       String
+  description String?
+  dueDate     DateTime
+  completedAt DateTime?
+  status      WorkStatus @default(PENDING)
+  assignedToId String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  lead        Lead       @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  assignedTo  User       @relation(fields: [assignedToId], references: [id], onDelete: Cascade)
+
+  @@map("works")
+}

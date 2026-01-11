@@ -1,0 +1,2 @@
+-- This migration was created manually to fix the missing migration file
+-- The actual migration for adding SITE_VISIT_DONE will be created next

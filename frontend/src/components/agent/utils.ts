@@ -31,7 +31,7 @@ export const getFollowUpStatusLabel = (status?: FollowUpStatus) => {
   if (!status) return 'Pending';
   const labels: Record<FollowUpStatus, string> = {
     [FollowUpStatus.PENDING]: 'Pending',
-    [FollowUpStatus.SCHEDULE_AFTER_2_DAYS]: 'Schedule After 2 Days',
+    [FollowUpStatus.SELECT_DATE]: 'Select Date',
     [FollowUpStatus.COMPLETED]: 'Completed',
     [FollowUpStatus.NOT_NEGOTIABLE]: 'Not Negotiable',
     [FollowUpStatus.INTERESTED]: 'Interested',

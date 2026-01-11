@@ -213,7 +213,7 @@ export const updateLead = async (req: AuthRequest, res: Response) => {
           updateData.status = LeadStatus.LOST;
           console.log(`Lead ${id} status updated to LOST because followUpStatus changed from SITE_VISIT_DONE to NOT_NEGOTIABLE`);
         } else {
-          // For other statuses (Interested, Schedule After 2 Days, etc.), move back to CONTACTED
+          // For other statuses (Interested, Select Date, etc.), move back to CONTACTED
           updateData.status = LeadStatus.CONTACTED;
           console.log(`Lead ${id} status updated to CONTACTED because followUpStatus changed from SITE_VISIT_DONE to ${followUpStatus}`);
         }

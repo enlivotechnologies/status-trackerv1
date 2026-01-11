@@ -68,7 +68,7 @@ const AgentDashboard = () => {
         } else if (newStatus === FollowUpStatus.NOT_NEGOTIABLE) {
           updateData.status = LeadStatus.LOST;
         } else {
-          // For other statuses (Interested, Schedule After 2 Days, etc.), move back to CONTACTED
+          // For other statuses (Interested, Select Date, etc.), move back to CONTACTED
           updateData.status = LeadStatus.CONTACTED;
         }
       }
@@ -111,6 +111,52 @@ const AgentDashboard = () => {
       console.error('Failed to update status:', error);
       await fetchDashboardData();
       alert('Failed to update status. Please try again.');
+    }
+  };
+
+  const handleDateChange = async (leadId: string, newDate: string) => {
+    try {
+      const currentLead = recentLeads.find(lead => lead.id === leadId);
+      if (!currentLead) {
+        console.error('Lead not found for date update:', leadId);
+        return;
+      }
+
+      // Convert date string to ISO DateTime (set time to start of day)
+      const dateObj = new Date(newDate);
+      dateObj.setHours(9, 0, 0, 0); // Set to 9 AM
+      const isoDateTime = dateObj.toISOString();
+
+      // Update follow-up date
+      const updateData = { 
+        followUpDate: isoDateTime
+      };
+
+      // Optimistically update the UI
+      setRecentLeads(prevLeads => 
+        prevLeads.map(lead => 
+          lead.id === leadId 
+            ? { 
+                ...lead, 
+                followUpDate: isoDateTime
+              }
+            : lead
+        )
+      );
+      
+      // Update in database
+      await leadsAPI.updateLead(leadId, updateData);
+      
+      // Refresh data to ensure sync
+      await new Promise(resolve => setTimeout(resolve, 500));
+      await fetchDashboardData();
+      
+      const freshStats = await dashboardAPI.getStats();
+      setStats(freshStats);
+    } catch (error) {
+      console.error('Failed to update date:', error);
+      await fetchDashboardData();
+      alert('Failed to update date. Please try again.');
     }
   };
 
@@ -159,6 +205,7 @@ const AgentDashboard = () => {
           <TodaysLeads 
             leads={recentLeads} 
             onStatusChange={handleStatusChange}
+            onDateChange={handleDateChange}
           />
           <ImportantNews news={importantNews} onAddNote={handleOpenNoteModal} />
         </div>

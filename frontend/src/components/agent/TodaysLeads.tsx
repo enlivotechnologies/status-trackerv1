@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lead, FollowUpStatus } from '../../types';
 import { formatFollowUpDate, formatDateTime, getFollowUpStatusLabel } from './utils';
@@ -5,10 +6,12 @@ import { formatFollowUpDate, formatDateTime, getFollowUpStatusLabel } from './ut
 interface TodaysLeadsProps {
   leads: Lead[];
   onStatusChange: (leadId: string, newStatus: FollowUpStatus) => void;
+  onDateChange?: (leadId: string, newDate: string) => void;
 }
 
-const TodaysLeads = ({ leads, onStatusChange }: TodaysLeadsProps) => {
+const TodaysLeads = ({ leads, onStatusChange, onDateChange }: TodaysLeadsProps) => {
   const navigate = useNavigate();
+  const [showDatePicker, setShowDatePicker] = useState<string | null>(null);
 
   return (
     <div className="lg:col-span-4 rounded-xl shadow-sm p-5 border border-black/10" style={{ backgroundColor: '#FEFDFB' }}>
@@ -67,22 +70,47 @@ const TodaysLeads = ({ leads, onStatusChange }: TodaysLeadsProps) => {
                     <span className="text-sm text-gray-700 truncate max-w-[100px] block">{lead.project || lead.location || '-'}</span>
                   </td>
                   <td className="px-3 py-3">
-                    <select
-                      value={lead.followUpStatus || FollowUpStatus.PENDING}
-                      onChange={(e) => {
-                        const newStatus = e.target.value as FollowUpStatus;
-                        onStatusChange(lead.id, newStatus);
-                      }}
-                      onClick={(e) => e.stopPropagation()}
-                      onFocus={(e) => e.stopPropagation()}
-                      className="text-xs px-2.5 py-1.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400 bg-white text-gray-900 cursor-pointer w-full max-w-[150px] font-medium hover:border-gray-400 transition-colors"
-                    >
-                      {Object.values(FollowUpStatus).map((status) => (
-                        <option key={status} value={status}>
-                          {getFollowUpStatusLabel(status)}
-                        </option>
-                      ))}
-                    </select>
+                    {showDatePicker === lead.id ? (
+                      <div className="relative">
+                        <input
+                          type="date"
+                          min={new Date().toISOString().split('T')[0]}
+                          onChange={(e) => {
+                            if (e.target.value && onDateChange) {
+                              onDateChange(lead.id, e.target.value);
+                              setShowDatePicker(null);
+                            }
+                          }}
+                          onBlur={() => {
+                            setTimeout(() => setShowDatePicker(null), 300);
+                          }}
+                          onClick={(e) => e.stopPropagation()}
+                          autoFocus
+                          className="text-xs px-2.5 py-1.5 rounded-md border border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 bg-white text-gray-900 cursor-pointer w-full max-w-[150px] font-medium"
+                        />
+                      </div>
+                    ) : (
+                      <select
+                        value={lead.followUpStatus || FollowUpStatus.PENDING}
+                        onChange={(e) => {
+                          const newStatus = e.target.value as FollowUpStatus;
+                          if (newStatus === FollowUpStatus.SELECT_DATE) {
+                            setShowDatePicker(lead.id);
+                          } else {
+                            onStatusChange(lead.id, newStatus);
+                          }
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                        onFocus={(e) => e.stopPropagation()}
+                        className="text-xs px-2.5 py-1.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400 bg-white text-gray-900 cursor-pointer w-full max-w-[150px] font-medium hover:border-gray-400 transition-colors"
+                      >
+                        {Object.values(FollowUpStatus).map((status) => (
+                          <option key={status} value={status}>
+                            {getFollowUpStatusLabel(status)}
+                          </option>
+                        ))}
+                      </select>
+                    )}
                   </td>
                   <td className="px-3 py-3 whitespace-nowrap">
                     <span className="text-xs text-gray-600">

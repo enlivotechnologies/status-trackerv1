@@ -10,6 +10,7 @@ const AllLeads = () => {
   const [filteredLeads, setFilteredLeads] = useState<Lead[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<'today' | 'week' | 'month' | 'all'>('today');
+  const [showDatePicker, setShowDatePicker] = useState<string | null>(null);
   const navigate = useNavigate();
   const { user } = useAuth();
 
@@ -121,7 +122,7 @@ const AllLeads = () => {
         } else if (newStatus === FollowUpStatus.NOT_NEGOTIABLE) {
           updateData.status = LeadStatus.LOST;
         } else {
-          // For other statuses (Interested, Schedule After 2 Days, etc.), move back to CONTACTED
+          // For other statuses (Interested, Select Date, etc.), move back to CONTACTED
           updateData.status = LeadStatus.CONTACTED;
         }
       }
@@ -162,6 +163,48 @@ const AllLeads = () => {
       // Revert on error by refreshing from database
       await fetchLeads();
       alert('Failed to update status. Please try again.');
+    }
+  };
+
+  const handleDateChange = async (leadId: string, newDate: string) => {
+    try {
+      const currentLead = filteredLeads.find(lead => lead.id === leadId);
+      if (!currentLead) {
+        console.error('Lead not found for date update:', leadId);
+        return;
+      }
+
+      // Convert date string to ISO DateTime (set time to start of day)
+      const dateObj = new Date(newDate);
+      dateObj.setHours(9, 0, 0, 0); // Set to 9 AM
+      const isoDateTime = dateObj.toISOString();
+
+      // Update follow-up date
+      const updateData = { 
+        followUpDate: isoDateTime
+      };
+
+      // Optimistically update the UI
+      setFilteredLeads(prevLeads => 
+        prevLeads.map(lead => 
+          lead.id === leadId 
+            ? { 
+                ...lead, 
+                followUpDate: isoDateTime
+              }
+            : lead
+        )
+      );
+      
+      // Update in database
+      await leadsAPI.updateLead(leadId, updateData);
+      
+      // Refresh data to ensure sync
+      await fetchLeads();
+    } catch (error) {
+      console.error('Failed to update date:', error);
+      await fetchLeads();
+      alert('Failed to update date. Please try again.');
     }
   };
 
@@ -314,22 +357,47 @@ const AllLeads = () => {
                         <div className="text-sm text-gray-900">{lead.phone}</div>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
-                        <select
-                          value={lead.followUpStatus || FollowUpStatus.PENDING}
-                          onChange={(e) => {
-                            const newStatus = e.target.value as FollowUpStatus;
-                            handleStatusChange(lead.id, newStatus);
-                          }}
-                          onClick={(e) => e.stopPropagation()}
-                          onFocus={(e) => e.stopPropagation()}
-                          className="text-xs px-3 py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 bg-white text-gray-900 cursor-pointer min-w-[160px] font-medium"
-                        >
-                          {Object.values(FollowUpStatus).map((status) => (
-                            <option key={status} value={status}>
-                              {getFollowUpStatusLabel(status)}
-                            </option>
-                          ))}
-                        </select>
+                        {showDatePicker === lead.id ? (
+                          <div className="relative">
+                            <input
+                              type="date"
+                              min={new Date().toISOString().split('T')[0]}
+                              onChange={(e) => {
+                                if (e.target.value) {
+                                  handleDateChange(lead.id, e.target.value);
+                                  setShowDatePicker(null);
+                                }
+                              }}
+                              onBlur={() => {
+                                setTimeout(() => setShowDatePicker(null), 300);
+                              }}
+                              onClick={(e) => e.stopPropagation()}
+                              autoFocus
+                              className="text-xs px-3 py-1.5 rounded-lg border border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 bg-white text-gray-900 cursor-pointer min-w-[160px] font-medium"
+                            />
+                          </div>
+                        ) : (
+                          <select
+                            value={lead.followUpStatus || FollowUpStatus.PENDING}
+                            onChange={(e) => {
+                              const newStatus = e.target.value as FollowUpStatus;
+                              if (newStatus === FollowUpStatus.SELECT_DATE) {
+                                setShowDatePicker(lead.id);
+                              } else {
+                                handleStatusChange(lead.id, newStatus);
+                              }
+                            }}
+                            onClick={(e) => e.stopPropagation()}
+                            onFocus={(e) => e.stopPropagation()}
+                            className="text-xs px-3 py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 bg-white text-gray-900 cursor-pointer min-w-[160px] font-medium"
+                          >
+                            {Object.values(FollowUpStatus).map((status) => (
+                              <option key={status} value={status}>
+                                {getFollowUpStatusLabel(status)}
+                              </option>
+                            ))}
+                          </select>
+                        )}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         <div className="text-sm text-gray-900">

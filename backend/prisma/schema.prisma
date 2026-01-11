@@ -38,7 +38,7 @@ enum WorkStatus {
 
 enum FollowUpStatus {
   PENDING
-  SCHEDULE_AFTER_2_DAYS
+  SELECT_DATE
   COMPLETED
   NOT_NEGOTIABLE
   INTERESTED
@@ -57,30 +57,30 @@ model User {
   updatedAt DateTime @updatedAt
 
   // Relations
-  leads     Lead[]
-  works     Work[]
+  leads Lead[]
+  works Work[]
 
   @@map("users")
 }
 
 model Lead {
-  id            String         @id @default(uuid())
-  name          String
-  phone         String
-  project       String?
-  location      String?
-  source        LeadSource
-  status        LeadStatus     @default(NEW)
-  followUpDate  DateTime       // Mandatory - no lead without follow-up date
+  id             String          @id @default(uuid())
+  name           String
+  phone          String
+  project        String?
+  location       String?
+  source         LeadSource
+  status         LeadStatus      @default(NEW)
+  followUpDate   DateTime // Mandatory - no lead without follow-up date
   followUpStatus FollowUpStatus? // Follow-up status for tracking
-  assignedToId  String
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  assignedToId   String
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 
   // Relations
-  assignedTo    User        @relation(fields: [assignedToId], references: [id], onDelete: Cascade)
-  notes         Note[]
-  works         Work[]
+  assignedTo User   @relation(fields: [assignedToId], references: [id], onDelete: Cascade)
+  notes      Note[]
+  works      Work[]
 
   @@map("leads")
 }
@@ -93,26 +93,26 @@ model Note {
   updatedAt DateTime @updatedAt
 
   // Relations
-  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  lead Lead @relation(fields: [leadId], references: [id], onDelete: Cascade)
 
   @@map("notes")
 }
 
 model Work {
-  id          String     @id @default(uuid())
-  leadId      String
-  title       String
-  description String?
-  dueDate     DateTime
-  completedAt DateTime?
-  status      WorkStatus @default(PENDING)
+  id           String     @id @default(uuid())
+  leadId       String
+  title        String
+  description  String?
+  dueDate      DateTime
+  completedAt  DateTime?
+  status       WorkStatus @default(PENDING)
   assignedToId String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 
   // Relations
-  lead        Lead       @relation(fields: [leadId], references: [id], onDelete: Cascade)
-  assignedTo  User       @relation(fields: [assignedToId], references: [id], onDelete: Cascade)
+  lead       Lead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  assignedTo User @relation(fields: [assignedToId], references: [id], onDelete: Cascade)
 
   @@map("works")
 }

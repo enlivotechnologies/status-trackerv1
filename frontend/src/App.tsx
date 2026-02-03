@@ -7,6 +7,9 @@ import LeadDetail from './pages/agent/LeadDetail';
 import CreateLead from './pages/agent/CreateLead';
 import AllLeads from './pages/agent/AllLeads';
 import Notifications from './pages/agent/Notifications';
+import CollegeDashboard from './pages/agent/CollegeDashboard';
+import AllColleges from './pages/agent/AllColleges';
+import CollegeDetail from './pages/agent/CollegeDetail';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminLeadsList from './pages/admin/AdminLeadsList';
 import AdminNotifications from './pages/admin/AdminNotifications';
@@ -20,12 +23,12 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           
-          {/* Agent Routes - Direct to Today's Calls */}
+          {/* Agent Routes - Direct to College Dashboard */}
           <Route
             path="/agent"
             element={
               <PrivateRoute allowedRoles={['AGENT', 'ADMIN']}>
-                <TodaysCalls />
+                <CollegeDashboard />
               </PrivateRoute>
             }
           />
@@ -66,6 +69,32 @@ function App() {
             element={
               <PrivateRoute allowedRoles={['AGENT', 'ADMIN']}>
                 <Notifications />
+              </PrivateRoute>
+            }
+          />
+
+          {/* College Routes */}
+          <Route
+            path="/agent/college-dashboard"
+            element={
+              <PrivateRoute allowedRoles={['AGENT', 'ADMIN']}>
+                <CollegeDashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/agent/colleges"
+            element={
+              <PrivateRoute allowedRoles={['AGENT', 'ADMIN']}>
+                <AllColleges />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/agent/colleges/:id"
+            element={
+              <PrivateRoute allowedRoles={['AGENT', 'ADMIN']}>
+                <CollegeDetail />
               </PrivateRoute>
             }
           />

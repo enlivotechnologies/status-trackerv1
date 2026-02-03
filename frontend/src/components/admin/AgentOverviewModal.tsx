@@ -70,14 +70,14 @@ const AgentOverviewModal = ({ isOpen, agent, onClose }: AgentOverviewModalProps)
 
   const getAgentChartData = (agent: AgentOverview) => {
     const performanceData = [
-      { name: 'Today', value: agent.leadsToday, color: '#3B82F6' },
-      { name: 'This Week', value: agent.leadsWeek, color: '#8B5CF6' },
-      { name: 'This Month', value: agent.leadsMonth, color: '#10B981' },
+      { name: 'Today', value: agent.leadsToday, color: '#9333EA' },
+      { name: 'This Week', value: agent.leadsWeek, color: '#A855F7' },
+      { name: 'This Month', value: agent.leadsMonth, color: '#C084FC' },
     ];
 
     const statusData = [
       { name: 'In Progress', value: agent.pending, color: '#F59E0B' },
-      { name: 'Closed Deals', value: agent.completed, color: '#10B981' },
+      { name: 'Seminars Done', value: agent.completed, color: '#10B981' },
     ];
 
     return { performanceData, statusData };
@@ -115,7 +115,7 @@ const AgentOverviewModal = ({ isOpen, agent, onClose }: AgentOverviewModalProps)
               onClick={() => setActiveTab('charts')}
               className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === 'charts'
-                  ? 'border-yellow-500 text-yellow-600'
+                  ? 'border-purple-500 text-purple-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
@@ -125,17 +125,17 @@ const AgentOverviewModal = ({ isOpen, agent, onClose }: AgentOverviewModalProps)
               onClick={() => setActiveTab('leads')}
               className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === 'leads'
-                  ? 'border-yellow-500 text-yellow-600'
+                  ? 'border-purple-500 text-purple-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
-              👥 All Leads ({agentLeads.length})
+              🎓 All Colleges ({agentLeads.length})
             </button>
             <button
               onClick={() => setActiveTab('map')}
               className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === 'map'
-                  ? 'border-yellow-500 text-yellow-600'
+                  ? 'border-purple-500 text-purple-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
@@ -150,7 +150,7 @@ const AgentOverviewModal = ({ isOpen, agent, onClose }: AgentOverviewModalProps)
             <>
               {/* Performance Bar Chart */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Lead Generation Performance</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">College Addition Performance</h3>
                 <div className="bg-white rounded-lg p-6 border border-gray-200">
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={performanceData}>
@@ -176,7 +176,7 @@ const AgentOverviewModal = ({ isOpen, agent, onClose }: AgentOverviewModalProps)
 
               {/* Status Pie Chart */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Pending Works vs Completed Leads</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Pending Works vs Seminars Done</h3>
                 <div className="bg-white rounded-lg p-6 border border-gray-200">
                   <ResponsiveContainer width="100%" height={300}>
                     <PieChart>
@@ -204,15 +204,15 @@ const AgentOverviewModal = ({ isOpen, agent, onClose }: AgentOverviewModalProps)
               {/* Summary Stats */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="bg-white rounded-lg p-4 border border-gray-200">
-                  <div className="text-sm text-gray-500 mb-1">Leads Today</div>
+                  <div className="text-sm text-gray-500 mb-1">Colleges Today</div>
                   <div className="text-2xl font-bold text-gray-900">{agent.leadsToday}</div>
                 </div>
                 <div className="bg-white rounded-lg p-4 border border-gray-200">
-                  <div className="text-sm text-gray-500 mb-1">Leads This Week</div>
+                  <div className="text-sm text-gray-500 mb-1">Colleges This Week</div>
                   <div className="text-2xl font-bold text-gray-900">{agent.leadsWeek}</div>
                 </div>
                 <div className="bg-white rounded-lg p-4 border border-gray-200">
-                  <div className="text-sm text-gray-500 mb-1">Leads This Month</div>
+                  <div className="text-sm text-gray-500 mb-1">Colleges This Month</div>
                   <div className="text-2xl font-bold text-gray-900">{agent.leadsMonth}</div>
                 </div>
                 <div className="bg-white rounded-lg p-4 border border-gray-200">
@@ -226,17 +226,17 @@ const AgentOverviewModal = ({ isOpen, agent, onClose }: AgentOverviewModalProps)
           {/* Leads Tab */}
           {activeTab === 'leads' && (
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">All Leads ({agentLeads.length})</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">All Colleges ({agentLeads.length})</h3>
               {isLoadingLeads ? (
                 <div className="bg-white rounded-lg p-12 border border-gray-200 text-center">
-                  <div className="text-gray-500">Loading leads...</div>
+                  <div className="text-gray-500">Loading colleges...</div>
                 </div>
               ) : agentLeads.length === 0 ? (
                 <div className="bg-white rounded-lg p-12 border border-gray-200 text-center">
                   <svg className="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  <p className="mt-4 text-sm text-gray-500">No leads found for this agent</p>
+                  <p className="mt-4 text-sm text-gray-500">No colleges found for this coordinator</p>
                 </div>
               ) : (
                 <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
@@ -293,7 +293,7 @@ const AgentOverviewModal = ({ isOpen, agent, onClose }: AgentOverviewModalProps)
           {/* Map Tab */}
           {activeTab === 'map' && (
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Lead Locations</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">College Locations</h3>
               <AgentLeadsMap leads={agentLeads} />
             </div>
           )}

@@ -38,6 +38,33 @@ export enum FollowUpStatus {
   SITE_VISIT_DONE = 'SITE_VISIT_DONE',
 }
 
+export enum CollegeStatus {
+  NEW = 'NEW',
+  CONTACTED = 'CONTACTED',
+  SEMINAR_SCHEDULED = 'SEMINAR_SCHEDULED',
+  SEMINAR_DONE = 'SEMINAR_DONE',
+  CONVERTED = 'CONVERTED',
+  NOT_INTERESTED = 'NOT_INTERESTED',
+}
+
+export enum CollegeFollowUpStatus {
+  PENDING = 'PENDING',
+  SELECT_DATE = 'SELECT_DATE',
+  COMPLETED = 'COMPLETED',
+  NOT_INTERESTED = 'NOT_INTERESTED',
+  INTERESTED = 'INTERESTED',
+  FOLLOW_UP_LATER = 'FOLLOW_UP_LATER',
+  NOT_RESPONDING = 'NOT_RESPONDING',
+}
+
+export enum SeminarStatus {
+  NOT_YET_SCHEDULED = 'NOT_YET_SCHEDULED',
+  WAITING_FOR_APPROVAL = 'WAITING_FOR_APPROVAL',
+  SCHEDULED = 'SCHEDULED',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED',
+}
+
 export interface User {
   id: string;
   email: string;
@@ -157,4 +184,72 @@ export interface AgentPerformance {
   commissionClosed: number;
   commissionLost: number;
   inProgressCommission: number;
+}
+
+// College Management System Types
+export interface College {
+  id: string;
+  collegeName: string;
+  contactPerson: string;
+  phone: string;
+  email?: string;
+  address?: string;
+  city?: string;
+  seminarDate?: string;
+  seminarStatus?: SeminarStatus;
+  followUpDate: string;
+  status: CollegeStatus;
+  followUpStatus?: CollegeFollowUpStatus;
+  lastContactedDate?: string;
+  assignedToId: string;
+  assignedTo?: User;
+  notes?: CollegeNote[];
+  works?: CollegeWork[];
+  activityLogs?: CollegeActivityLog[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface CollegeNote {
+  id: string;
+  content: string;
+  collegeId: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface CollegeWork {
+  id: string;
+  collegeId: string;
+  title: string;
+  description?: string;
+  dueDate: string;
+  completedAt?: string;
+  status: WorkStatus;
+  assignedToId: string;
+  assignedTo?: User;
+  college?: College;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface CollegeActivityLog {
+  id: string;
+  collegeId: string;
+  agentId: string;
+  agentName: string;
+  action: string;
+  oldValue?: string;
+  newValue?: string;
+  description: string;
+  createdAt: string;
+}
+
+export interface CollegeDashboardStats {
+  totalColleges: number;
+  followUpsToday: number;
+  seminarsScheduled: number;
+  seminarsDone: number;
+  converted: number;
+  pendingWorks: number;
 }

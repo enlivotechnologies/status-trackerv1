@@ -17,20 +17,22 @@ const AdminDashboardHeader = () => {
         <div className="flex items-center space-x-4">
           {/* Logo/Icon */}
           <div className="flex-shrink-0">
-            <img 
-              src="https://i.pinimg.com/1200x/7a/a1/d2/7aa1d2d02f060691bf7f5a3b76487a02.jpg" 
-              alt="Logo" 
-              className="h-12 w-12 object-contain rounded-lg"
-            />
+            <div className="h-12 w-12 bg-purple-600 rounded-lg flex items-center justify-center">
+              <svg className="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+              </svg>
+            </div>
           </div>
           
           {/* Welcome Message */}
           <div>
             <h1 className="text-xl font-semibold text-gray-900">
-              Owner Dashboard
+              Admin Dashboard
             </h1>
             <p className="text-sm text-gray-500 mt-1">
-              Revenue Overview of all agents and leads
+              Overview of all coordinators and colleges
             </p>
           </div>
         </div>
@@ -61,9 +63,9 @@ const AdminDashboardHeader = () => {
           
           <button
             onClick={() => navigate('/admin/leads')}
-            className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-all"
+            className="px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-all"
           >
-            View All Leads
+            View All Colleges
           </button>
         </div>
       </div>

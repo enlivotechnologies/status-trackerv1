@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AuthResponse, Lead, Note, DashboardStats, LoginCredentials, Work } from '../types';
+import { AuthResponse, Lead, Note, DashboardStats, LoginCredentials, Work, College, CollegeNote, CollegeWork, CollegeDashboardStats } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
@@ -136,5 +136,91 @@ export const worksAPI = {
   },
   deleteWork: async (id: string): Promise<void> => {
     await api.delete(`/works/${id}`);
+  },
+};
+
+// Colleges API
+export const collegesAPI = {
+  getCollegesToFollowUpToday: async (period: 'today' | 'week' | 'month' = 'today'): Promise<College[]> => {
+    const response = await api.get('/colleges/today', { params: { period } });
+    return response.data;
+  },
+  getColleges: async (): Promise<College[]> => {
+    const response = await api.get('/colleges/my-colleges');
+    return response.data;
+  },
+  getCollegeById: async (id: string): Promise<College> => {
+    const response = await api.get(`/colleges/${id}`);
+    return response.data;
+  },
+  createCollege: async (college: Partial<College>): Promise<College> => {
+    const response = await api.post('/colleges', college);
+    return response.data;
+  },
+  updateCollege: async (id: string, college: Partial<College>): Promise<College> => {
+    const response = await api.put(`/colleges/${id}`, college);
+    return response.data;
+  },
+  getStats: async (): Promise<CollegeDashboardStats> => {
+    const response = await api.get('/colleges/stats');
+    return response.data;
+  },
+  // Admin only
+  getAllColleges: async (): Promise<College[]> => {
+    const response = await api.get('/colleges/admin/all');
+    return response.data;
+  },
+  getCollegesByAgent: async (agentId: string): Promise<College[]> => {
+    const response = await api.get(`/colleges/admin/agent/${agentId}`);
+    return response.data;
+  },
+};
+
+// College Notes API
+export const collegeNotesAPI = {
+  createNote: async (collegeId: string, content: string): Promise<CollegeNote> => {
+    const response = await api.post('/college-notes', { collegeId, content });
+    return response.data;
+  },
+  getNotesByCollege: async (collegeId: string): Promise<CollegeNote[]> => {
+    const response = await api.get(`/college-notes/college/${collegeId}`);
+    return response.data;
+  },
+  deleteNote: async (id: string): Promise<void> => {
+    await api.delete(`/college-notes/${id}`);
+  },
+};
+
+// College Works API
+export const collegeWorksAPI = {
+  createWork: async (work: Partial<CollegeWork>): Promise<CollegeWork> => {
+    const response = await api.post('/college-works', work);
+    return response.data;
+  },
+  getWorks: async (): Promise<CollegeWork[]> => {
+    const response = await api.get('/college-works');
+    return response.data;
+  },
+  getWorkStats: async (): Promise<{
+    totalWorks: number;
+    completedWorks: number;
+    pendingWorks: number;
+    worksDueToday: number;
+    recentCompletedWorks: CollegeWork[];
+    pendingWorksList: CollegeWork[];
+  }> => {
+    const response = await api.get('/college-works/stats');
+    return response.data;
+  },
+  updateWork: async (id: string, work: Partial<CollegeWork>): Promise<CollegeWork> => {
+    const response = await api.put(`/college-works/${id}`, work);
+    return response.data;
+  },
+  completeWork: async (id: string): Promise<CollegeWork> => {
+    const response = await api.patch(`/college-works/${id}/complete`);
+    return response.data;
+  },
+  deleteWork: async (id: string): Promise<void> => {
+    await api.delete(`/college-works/${id}`);
   },
 };

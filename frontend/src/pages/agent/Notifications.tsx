@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { worksAPI } from '../../services/api';
-import { Work } from '../../types';
+import { worksAPI, leadsAPI, collegesAPI } from '../../services/api';
+import { Work, Lead, College } from '../../types';
 
 interface WorkStats {
   totalWorks: number;
@@ -17,22 +17,31 @@ const Notifications = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [workStats, setWorkStats] = useState<WorkStats | null>(null);
+  const [leadsToFollowUp, setLeadsToFollowUp] = useState<Lead[]>([]);
+  const [collegesToFollowUp, setCollegesToFollowUp] = useState<College[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [completingWorkId, setCompletingWorkId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'followups' | 'works'>('followups');
 
-  const fetchWorkStats = async () => {
+  const fetchData = async () => {
     try {
-      const stats = await worksAPI.getWorkStats();
+      const [stats, leads, colleges] = await Promise.all([
+        worksAPI.getWorkStats(),
+        leadsAPI.getLeadsToCallToday('today'),
+        collegesAPI.getCollegesToFollowUpToday('today')
+      ]);
       setWorkStats(stats);
+      setLeadsToFollowUp(leads);
+      setCollegesToFollowUp(colleges);
     } catch (error) {
-      console.error('Failed to fetch work stats:', error);
+      console.error('Failed to fetch data:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchWorkStats();
+    fetchData();
   }, []);
 
   const handleLogout = () => {
@@ -44,7 +53,7 @@ const Notifications = () => {
     setCompletingWorkId(workId);
     try {
       await worksAPI.completeWork(workId);
-      await fetchWorkStats();
+      await fetchData();
     } catch (error) {
       console.error('Failed to complete work:', error);
       alert('Failed to mark work as completed');
@@ -129,7 +138,38 @@ const Notifications = () => {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+          {/* Leads to Follow-up Today */}
+          <div className="bg-white rounded-xl shadow-sm p-4 border border-orange-200">
+            <div className="flex items-center space-x-3 mb-2">
+              <div className="h-10 w-10 rounded-lg bg-orange-100 flex items-center justify-center">
+                <svg className="h-6 w-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </div>
+              <div>
+                <div className="text-sm text-gray-500">Leads Today</div>
+                <div className="text-2xl font-bold text-orange-600">{leadsToFollowUp.length}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Colleges to Follow-up Today */}
+          <div className="bg-white rounded-xl shadow-sm p-4 border border-purple-200">
+            <div className="flex items-center space-x-3 mb-2">
+              <div className="h-10 w-10 rounded-lg bg-purple-100 flex items-center justify-center">
+                <svg className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                  <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                </svg>
+              </div>
+              <div>
+                <div className="text-sm text-gray-500">Colleges Today</div>
+                <div className="text-2xl font-bold text-purple-600">{collegesToFollowUp.length}</div>
+              </div>
+            </div>
+          </div>
+
           {/* Closed Deals */}
           <div className="bg-white rounded-xl shadow-sm p-4 border border-green-200">
             <div className="flex items-center space-x-3 mb-2">
@@ -154,13 +194,13 @@ const Notifications = () => {
                 </svg>
               </div>
               <div>
-                <div className="text-sm text-gray-500">In Progress</div>
+                <div className="text-sm text-gray-500">Pending Works</div>
                 <div className="text-2xl font-bold text-red-600">{workStats?.pendingWorks || 0}</div>
               </div>
             </div>
           </div>
 
-          {/* Due Today */}
+          {/* Works Due Today */}
           <div className="bg-white rounded-xl shadow-sm p-4 border border-yellow-200">
             <div className="flex items-center space-x-3 mb-2">
               <div className="h-10 w-10 rounded-lg bg-yellow-100 flex items-center justify-center">
@@ -169,28 +209,181 @@ const Notifications = () => {
                 </svg>
               </div>
               <div>
-                <div className="text-sm text-gray-500">Due Today</div>
+                <div className="text-sm text-gray-500">Works Due Today</div>
                 <div className="text-2xl font-bold text-yellow-600">{workStats?.worksDueToday || 0}</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Total Works */}
-          <div className="bg-white rounded-xl shadow-sm p-4 border border-blue-200">
-            <div className="flex items-center space-x-3 mb-2">
-              <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                <svg className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-              </div>
-              <div>
-                <div className="text-sm text-gray-500">Total Works</div>
-                <div className="text-2xl font-bold text-blue-600">{workStats?.totalWorks || 0}</div>
               </div>
             </div>
           </div>
         </div>
 
+        {/* Tabs */}
+        <div className="flex space-x-4 mb-6">
+          <button
+            onClick={() => setActiveTab('followups')}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              activeTab === 'followups'
+                ? 'bg-orange-100 text-orange-700'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            Follow-up Reminders ({leadsToFollowUp.length + collegesToFollowUp.length})
+          </button>
+          <button
+            onClick={() => setActiveTab('works')}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              activeTab === 'works'
+                ? 'bg-red-100 text-red-700'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            Work Notifications ({workStats?.pendingWorks || 0})
+          </button>
+        </div>
+
+        {/* Follow-up Reminders Tab */}
+        {activeTab === 'followups' && (
+          <>
+            {/* Leads Follow-up Section */}
+            {leadsToFollowUp.length > 0 && (
+              <div className="mb-8">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <span className="h-3 w-3 rounded-full bg-orange-500 mr-2"></span>
+                  Leads to Follow-up Today ({leadsToFollowUp.length})
+                </h2>
+                <div className="bg-white rounded-xl border border-orange-200 overflow-hidden">
+                  <table className="min-w-full">
+                    <thead>
+                      <tr className="border-b border-orange-100 bg-orange-50">
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-orange-700 uppercase tracking-wider">Lead</th>
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-orange-700 uppercase tracking-wider">Phone</th>
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-orange-700 uppercase tracking-wider">Follow-up Date</th>
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-orange-700 uppercase tracking-wider">Status</th>
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-orange-700 uppercase tracking-wider">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-orange-100">
+                      {leadsToFollowUp.map((lead) => (
+                        <tr key={lead.id} className="hover:bg-orange-50 transition-colors">
+                          <td className="px-4 py-4">
+                            <div className="flex items-center space-x-3">
+                              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center shadow-sm">
+                                <span className="text-sm font-semibold text-white">
+                                  {lead.name?.charAt(0).toUpperCase() || '?'}
+                                </span>
+                              </div>
+                              <div>
+                                <div className="font-medium text-gray-900">{lead.name}</div>
+                                <div className="text-xs text-gray-500">{lead.email || '-'}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-4 py-4">
+                            <span className="text-sm text-gray-700">{lead.phone}</span>
+                          </td>
+                          <td className="px-4 py-4">
+                            <span className="text-sm text-orange-600 font-medium">{formatDate(lead.followUpDate)}</span>
+                          </td>
+                          <td className="px-4 py-4">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                              {lead.followUpStatus?.replace(/_/g, ' ') || 'Pending'}
+                            </span>
+                          </td>
+                          <td className="px-4 py-4">
+                            <button
+                              onClick={() => navigate(`/agent/lead/${lead.id}`)}
+                              className="px-3 py-1.5 bg-orange-100 text-orange-700 text-sm font-medium rounded-lg hover:bg-orange-200 transition-colors"
+                            >
+                              View Lead
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* Colleges Follow-up Section */}
+            {collegesToFollowUp.length > 0 && (
+              <div className="mb-8">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <span className="h-3 w-3 rounded-full bg-purple-500 mr-2"></span>
+                  Colleges to Follow-up Today ({collegesToFollowUp.length})
+                </h2>
+                <div className="bg-white rounded-xl border border-purple-200 overflow-hidden">
+                  <table className="min-w-full">
+                    <thead>
+                      <tr className="border-b border-purple-100 bg-purple-50">
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-purple-700 uppercase tracking-wider">College</th>
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-purple-700 uppercase tracking-wider">Contact</th>
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-purple-700 uppercase tracking-wider">Follow-up Date</th>
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-purple-700 uppercase tracking-wider">Status</th>
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-purple-700 uppercase tracking-wider">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-purple-100">
+                      {collegesToFollowUp.map((college) => (
+                        <tr key={college.id} className="hover:bg-purple-50 transition-colors">
+                          <td className="px-4 py-4">
+                            <div className="flex items-center space-x-3">
+                              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-purple-400 to-purple-500 flex items-center justify-center shadow-sm">
+                                <span className="text-sm font-semibold text-white">
+                                  {college.collegeName?.charAt(0).toUpperCase() || '?'}
+                                </span>
+                              </div>
+                              <div>
+                                <div className="font-medium text-gray-900">{college.collegeName}</div>
+                                <div className="text-xs text-gray-500">{college.city || '-'}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-4 py-4">
+                            <div>
+                              <div className="text-sm text-gray-700">{college.contactPerson}</div>
+                              <div className="text-xs text-gray-500">{college.phone}</div>
+                            </div>
+                          </td>
+                          <td className="px-4 py-4">
+                            <span className="text-sm text-purple-600 font-medium">{formatDate(college.nextFollowUpDate)}</span>
+                          </td>
+                          <td className="px-4 py-4">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                              {college.status?.replace(/_/g, ' ') || 'New'}
+                            </span>
+                          </td>
+                          <td className="px-4 py-4">
+                            <button
+                              onClick={() => navigate(`/agent/colleges/${college.id}`)}
+                              className="px-3 py-1.5 bg-purple-100 text-purple-700 text-sm font-medium rounded-lg hover:bg-purple-200 transition-colors"
+                            >
+                              View College
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* Empty State for Follow-ups */}
+            {leadsToFollowUp.length === 0 && collegesToFollowUp.length === 0 && (
+              <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+                <svg className="mx-auto h-12 w-12 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h3 className="mt-4 text-lg font-semibold text-gray-900">No follow-ups for today!</h3>
+                <p className="mt-2 text-sm text-gray-500">You're all caught up! No leads or colleges need follow-up today.</p>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Works Tab */}
+        {activeTab === 'works' && (
+          <>
         {/* In Progress Section (RED) */}
         {workStats && workStats.pendingWorksList.length > 0 && (
           <div className="mb-8">
@@ -320,6 +513,8 @@ const Notifications = () => {
             <h3 className="mt-4 text-lg font-semibold text-gray-900">No work notifications</h3>
             <p className="mt-2 text-sm text-gray-500">You're all caught up! No pending works at the moment.</p>
           </div>
+        )}
+          </>
         )}
       </main>
     </div>

@@ -35,9 +35,9 @@ const AdminDashboard = () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8">
         <AgentStatistics stats={stats} />
 
-        {/* Agent Performance View (Owner) Section */}
+        {/* Coordinator Performance Section */}
         <div className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-5">Agent Performance</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-5">Coordinator Performance</h2>
           <AgentOverviewTable agents={agentOverview} onOpenOverview={handleOpenOverview} />
         </div>
       </main>

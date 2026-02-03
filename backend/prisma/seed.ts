@@ -7,7 +7,7 @@ async function main() {
   console.log('🌱 Seeding database...');
 
   // Create admin user
-  const adminEmail = 'admin@realestate.com';
+  const adminEmail = 'admin@college.com';
   const adminPassword = 'admin123'; // Change this in production!
 
   const hashedPassword = await bcrypt.hash(adminPassword, 10);
@@ -25,49 +25,49 @@ async function main() {
 
   console.log('✅ Admin user created:', admin.email);
 
-  // Create sample agent
-  const agentEmail = 'agent@realestate.com';
-  const agentPassword = 'agent123'; // Change this in production!
+  // Create Neha coordinator
+  const nehaEmail = 'neha@college.com';
+  const nehaPassword = 'neha123'; // Change this in production!
 
-  const agentHashedPassword = await bcrypt.hash(agentPassword, 10);
+  const nehaHashedPassword = await bcrypt.hash(nehaPassword, 10);
 
-  const agent = await prisma.user.upsert({
-    where: { email: agentEmail },
+  const neha = await prisma.user.upsert({
+    where: { email: nehaEmail },
     update: {},
     create: {
-      email: agentEmail,
-      password: agentHashedPassword,
-      name: 'Sample Agent',
+      email: nehaEmail,
+      password: nehaHashedPassword,
+      name: 'Neha',
       role: UserRole.AGENT,
     },
   });
 
-  console.log('✅ Agent user created:', agent.email);
+  console.log('✅ Coordinator created:', neha.email);
 
-  // Create second agent
-  const agent2Email = 'agent2@realestate.com';
-  const agent2Password = 'agent2123'; // Change this in production!
+  // Create Abhi coordinator
+  const abhiEmail = 'abhi@college.com';
+  const abhiPassword = 'abhi123'; // Change this in production!
 
-  const agent2HashedPassword = await bcrypt.hash(agent2Password, 10);
+  const abhiHashedPassword = await bcrypt.hash(abhiPassword, 10);
 
-  const agent2 = await prisma.user.upsert({
-    where: { email: agent2Email },
+  const abhi = await prisma.user.upsert({
+    where: { email: abhiEmail },
     update: {},
     create: {
-      email: agent2Email,
-      password: agent2HashedPassword,
-      name: 'Second Agent',
+      email: abhiEmail,
+      password: abhiHashedPassword,
+      name: 'Abhi',
       role: UserRole.AGENT,
     },
   });
 
-  console.log('Second agent user created:', agent2.email);
+  console.log('✅ Coordinator created:', abhi.email);
 
   console.log('\n📝 Login credentials:');
   console.log('Admin:', adminEmail, '/', adminPassword);
-  console.log('Agent 1:', agentEmail, '/', agentPassword);
-  console.log('Agent 2:', agent2Email, '/', agent2Password);
-  console.log('\n Please change these passwords in production!');
+  console.log('Neha:', nehaEmail, '/', nehaPassword);
+  console.log('Abhi:', abhiEmail, '/', abhiPassword);
+  console.log('\n⚠️ Please change these passwords in production!');
 }
 
 main()

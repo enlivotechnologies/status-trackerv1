@@ -24,16 +24,6 @@ interface AgentOverviewTableProps {
 }
 
 const AgentOverviewTable = ({ agents, onOpenOverview }: AgentOverviewTableProps) => {
-  // Format currency to Indian Rupees
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
-
   if (agents.length === 0) {
     return (
       <div className="rounded-xl shadow-sm border border-gray-200/60 overflow-hidden" style={{ backgroundColor: '#FEFDFB' }}>
@@ -41,7 +31,7 @@ const AgentOverviewTable = ({ agents, onOpenOverview }: AgentOverviewTableProps)
           <svg className="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
-          <p className="mt-4 text-sm text-gray-400">No agents found</p>
+          <p className="mt-4 text-sm text-gray-400">No coordinators found</p>
         </div>
       </div>
     );
@@ -49,31 +39,28 @@ const AgentOverviewTable = ({ agents, onOpenOverview }: AgentOverviewTableProps)
 
   return (
     <div className="rounded-xl shadow-sm border border-gray-200/60 overflow-hidden" style={{ backgroundColor: '#FEFDFB' }}>
-      <div className="px-6 py-4 border-b border-gray-200/60 bg-gradient-to-r from-gray-50 to-gray-100/50">
-        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Agent Revenue Overview</h3>
-        <p className="text-xs text-gray-500 mt-1">Sorted by highest lost commission, then highest closed commission</p>
+      <div className="px-6 py-4 border-b border-gray-200/60 bg-gradient-to-r from-purple-50 to-purple-100/50">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Coordinator Overview</h3>
+        <p className="text-xs text-gray-500 mt-1">College management performance by coordinator</p>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full">
           <thead>
             <tr className="border-b border-gray-200/60 bg-gray-50/50">
               <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                Agent Name
+                Coordinator Name
               </th>
               <th className="px-6 py-4 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">
-                Total Leads
+                Total Colleges
               </th>
               <th className="px-6 py-4 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">
                 Overdue
               </th>
               <th className="px-6 py-4 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">
-                Closed Deals
+                Seminars Done
               </th>
               <th className="px-6 py-4 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">
-                Lost Deals
-              </th>
-              <th className="px-6 py-4 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">
-                Commission Closed (₹)
+                Pending
               </th>
               <th className="px-6 py-4 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">
                 Actions
@@ -82,7 +69,6 @@ const AgentOverviewTable = ({ agents, onOpenOverview }: AgentOverviewTableProps)
           </thead>
           <tbody>
             {agents.map((agent, index) => {
-              const hasHighLostCommission = agent.commissionLost > 0;
               const hasOverdueLeads = agent.overdueLeads > 0;
               
               return (
@@ -90,12 +76,12 @@ const AgentOverviewTable = ({ agents, onOpenOverview }: AgentOverviewTableProps)
                   key={agent.agentId} 
                   className={`border-b border-gray-100/50 transition-all duration-200 ${
                     index === agents.length - 1 ? 'border-b-0' : ''
-                  } ${hasHighLostCommission ? 'bg-red-50/40' : 'hover:bg-gray-50/40'}`}
+                  } ${hasOverdueLeads ? 'bg-red-50/40' : 'hover:bg-gray-50/40'}`}
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className={`h-10 w-10 rounded-full flex items-center justify-center mr-3 flex-shrink-0 ${
-                        hasHighLostCommission ? 'bg-red-500' : 'bg-blue-500'
+                        hasOverdueLeads ? 'bg-red-500' : 'bg-purple-500'
                       }`}>
                         <span className="text-sm font-medium text-white">
                           {agent.agentName.charAt(0).toUpperCase()}
@@ -126,24 +112,12 @@ const AgentOverviewTable = ({ agents, onOpenOverview }: AgentOverviewTableProps)
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-center">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      agent.lostDeals > 0 
-                        ? 'bg-red-100 text-red-800' 
+                      agent.pending > 0 
+                        ? 'bg-amber-100 text-amber-800' 
                         : 'bg-gray-100 text-gray-600'
                     }`}>
-                      {agent.lostDeals}
+                      {agent.pending}
                     </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right">
-                    <span className={`text-sm font-bold ${
-                      agent.commissionClosed > 0 ? 'text-emerald-600' : 'text-gray-500'
-                    }`}>
-                      {formatCurrency(agent.commissionClosed)}
-                    </span>
-                    {agent.commissionLost > 0 && (
-                      <div className="text-xs text-red-500 mt-0.5">
-                        Lost: {formatCurrency(agent.commissionLost)}
-                      </div>
-                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-center">
                     <button
@@ -151,7 +125,7 @@ const AgentOverviewTable = ({ agents, onOpenOverview }: AgentOverviewTableProps)
                         e.stopPropagation();
                         onOpenOverview(agent);
                       }}
-                      className="px-3 py-1.5 bg-gradient-to-b from-yellow-500 to-yellow-400 hover:from-yellow-600 hover:to-yellow-500 text-white text-xs font-medium rounded-lg transition-all shadow-sm"
+                      className="px-3 py-1.5 bg-gradient-to-b from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white text-xs font-medium rounded-lg transition-all shadow-sm"
                     >
                       Details
                     </button>

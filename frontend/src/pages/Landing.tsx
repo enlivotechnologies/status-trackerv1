@@ -9,20 +9,21 @@ const Landing = () => {
     {
       icon: (
         <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
       ),
-      title: "Never Miss a Follow-Up",
-      description: "Every lead gets a mandatory follow-up date. No lead is ever forgotten."
+      title: "Schedule Seminars",
+      description: "Track seminar dates for every college. Never miss an important event."
     },
     {
       icon: (
         <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
         </svg>
       ),
-      title: "Agent Accountability",
-      description: "Clear ownership. Every lead is assigned. Every action is tracked."
+      title: "College Management",
+      description: "Track all college contacts, status, and engagement in one place."
     },
     {
       icon: (
@@ -31,16 +32,16 @@ const Landing = () => {
         </svg>
       ),
       title: "Real-Time Visibility",
-      description: "Owners see everything. Know which leads are stuck. Know which agents need support."
+      description: "See all colleges at a glance. Know which need attention."
     },
     {
       icon: (
         <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
         </svg>
       ),
-      title: "10-Second Updates",
-      description: "Update a lead in under 10 seconds. Simple. Fast. Effective."
+      title: "Scheduled Contacts",
+      description: "Plan and track scheduled contact dates with colleges."
     },
     {
       icon: (
@@ -49,16 +50,16 @@ const Landing = () => {
         </svg>
       ),
       title: "Complete History",
-      description: "Every interaction is logged. Never lose context when leads are reassigned."
+      description: "Every interaction is logged. Full audit trail for each college."
     },
     {
       icon: (
         <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       ),
-      title: "Daily Execution",
-      description: "Built for daily use. The first screen shows who to call today. Every morning."
+      title: "Follow-Up Reminders",
+      description: "Automatic reminders for next follow-up dates. Stay on top of everything."
     }
   ];
 
@@ -76,16 +77,17 @@ const Landing = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
-              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-500 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
                 <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
                 </svg>
               </div>
-              <span className="text-xl font-bold text-gray-900">Real Estate CRM</span>
+              <span className="text-xl font-bold text-gray-900">College Management</span>
             </div>
             <button
               onClick={() => navigate('/login')}
-              className="px-6 py-2.5 bg-gradient-to-b from-yellow-500 to-yellow-400 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-200 transform hover:scale-105"
+              className="px-6 py-2.5 bg-gradient-to-b from-purple-600 to-purple-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-200 transform hover:scale-105"
             >
               Login
             </button>
@@ -97,33 +99,33 @@ const Landing = () => {
       <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         {/* Decorative background elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-yellow-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-          <div className="absolute top-40 right-10 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-          <div className="absolute -bottom-8 left-1/2 w-72 h-72 bg-yellow-100 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+          <div className="absolute top-20 left-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+          <div className="absolute top-40 right-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+          <div className="absolute -bottom-8 left-1/2 w-72 h-72 bg-purple-100 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
         </div>
         
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center">
             <div className="inline-block mb-6 animate-fade-in">
-              <span className="px-4 py-2 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold shadow-sm">
-                🚀 Trusted by Real Estate Teams Worldwide
+              <span className="px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-sm font-semibold shadow-sm">
+                🎓 College Management Made Simple
               </span>
             </div>
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight animate-fade-in-up">
-              Never Lose a Lead
+              Manage Colleges
               <br />
-              <span className="bg-gradient-to-r from-yellow-500 to-yellow-400 bg-clip-text text-transparent">
-                Never Miss a Follow-Up
+              <span className="bg-gradient-to-r from-purple-600 to-purple-500 bg-clip-text text-transparent">
+                Track Seminars & Follow-ups
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 mb-10 max-w-3xl mx-auto leading-relaxed">
-              The daily execution tool that ensures every real estate lead is followed up on time, 
-              every agent is accountable, and owners always have clear visibility.
+              The complete solution for managing college seminars, scheduling contacts, 
+              and tracking follow-up dates. Never miss an important engagement.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <button
                 onClick={() => navigate('/login')}
-                className="px-8 py-4 bg-gradient-to-b from-yellow-500 to-yellow-400 text-white font-bold rounded-xl text-lg hover:shadow-2xl transition-all duration-200 transform hover:scale-105 flex items-center space-x-2"
+                className="px-8 py-4 bg-gradient-to-b from-purple-600 to-purple-500 text-white font-bold rounded-xl text-lg hover:shadow-2xl transition-all duration-200 transform hover:scale-105 flex items-center space-x-2"
               >
                 <span>Get Started</span>
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -132,7 +134,7 @@ const Landing = () => {
               </button>
               <button
                 onClick={() => navigate('/login')}
-                className="px-8 py-4 bg-white text-gray-900 font-bold rounded-xl text-lg border-2 border-gray-300 hover:border-yellow-400 hover:shadow-xl transition-all duration-200"
+                className="px-8 py-4 bg-white text-gray-900 font-bold rounded-xl text-lg border-2 border-gray-300 hover:border-purple-500 hover:shadow-xl transition-all duration-200"
               >
                 Login to Dashboard
               </button>
@@ -156,7 +158,7 @@ const Landing = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Built for Real Estate Teams
+              Built for College Management
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Simple. Fast. Effective. Everything you need, nothing you don't.
@@ -169,7 +171,7 @@ const Landing = () => {
                 key={index}
                 className="p-8 rounded-2xl border border-gray-200 bg-white"
               >
-                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-500 flex items-center justify-center text-white mb-6">
+                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white mb-6">
                   {feature.icon}
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
@@ -181,50 +183,42 @@ const Landing = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-yellow-50 to-yellow-100">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 to-purple-100">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               Frequently Asked Questions
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Everything you need to know about how we transform real estate lead management
+              Everything you need to know about managing colleges effectively
             </p>
           </div>
 
           <div className="space-y-3">
             {[
               {
-                question: "How is this different from other CRMs?",
-                answer: "Unlike generic CRMs, we're built specifically for real estate daily execution. Every lead MUST have a follow-up date—no exceptions. Our 'Leads to Call Today' screen is the first thing agents see every morning, ensuring nothing falls through the cracks. We enforce discipline, not just track data."
+                question: "What can I track with this system?",
+                answer: "You can track college names, seminar dates, scheduled contact dates, and next follow-up dates. Each college has a complete history of all interactions and notes."
               },
               {
-                question: "What makes this system prevent lost leads?",
-                answer: "Our mandatory follow-up date system ensures every lead has a next action. Combined with daily reminders, pending work alerts, and complete interaction history, agents can't forget a lead. The system tracks everything from first contact to closing, with automatic status updates and work item creation."
+                question: "How do follow-up reminders work?",
+                answer: "Every college must have a next follow-up date. The system shows which colleges need attention today and sends automatic reminders so you never miss an important engagement."
               },
               {
-                question: "How fast can agents update leads?",
-                answer: "Agents can update a lead in under 10 seconds. Our streamlined interface shows exactly what needs attention today, with one-click status updates, quick note additions, and instant follow-up date changes. No complex forms, no unnecessary fields—just fast, effective updates."
+                question: "Can I add notes to each college?",
+                answer: "Yes! You can add unlimited notes to each college record. All notes are timestamped and preserved as a complete interaction history."
               },
               {
-                question: "What visibility do owners get?",
-                answer: "Owners see everything in real-time: which leads are stuck, which agents need support, pending follow-ups, site visits completed, deals closed, and agent performance metrics. The admin dashboard provides complete transparency without micromanagement, helping owners make data-driven decisions."
+                question: "How do I track seminar schedules?",
+                answer: "Each college record includes a seminar date field. You can easily see upcoming seminars and plan your outreach accordingly."
               },
               {
-                question: "How does agent accountability work?",
-                answer: "Every lead is assigned to a specific agent. Agents only see their own leads, creating clear ownership. All actions are tracked with timestamps. Owners can see per-agent statistics including leads generated, pending works, completion rates, and activity levels. This creates natural accountability without constant oversight."
+                question: "Can multiple users manage colleges?",
+                answer: "Yes! The system supports multiple users with role-based access. Admins can see all colleges while agents manage their assigned colleges."
               },
               {
-                question: "What happens when a lead is reassigned?",
-                answer: "When a lead is reassigned, the complete interaction history moves with it. Every note, every status change, every follow-up date is preserved. The new agent has full context immediately, preventing repeated calls and confusion. This seamless handoff ensures continuity."
-              },
-              {
-                question: "How does the follow-up system work?",
-                answer: "Every lead requires a follow-up date before it can be saved. The system automatically creates work items for each follow-up. Agents see 'Leads to Call Today' every morning. If a follow-up is missed, it appears in pending works with alerts. This ensures no lead is ever forgotten."
-              },
-              {
-                question: "Can I track site visits and deals?",
-                answer: "Absolutely! The system tracks site visits automatically when status is updated. Deals closed are counted when leads are marked as completed. The dashboard shows real-time metrics: total leads, follow-ups due today, site visits done this month, and deals closed. All data syncs instantly across the platform."
+                question: "How do I get started?",
+                answer: "Simply log in with your credentials and start adding colleges. The interface is intuitive and designed for quick data entry."
               }
             ].map((faq, index) => (
               <div
@@ -236,7 +230,7 @@ const Landing = () => {
                   className="w-full p-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
                 >
                   <h3 className="text-sm font-semibold text-gray-900 pr-4 flex items-start">
-                    <span className="text-yellow-500 mr-2 text-base">Q.</span>
+                    <span className="text-purple-500 mr-2 text-base">Q.</span>
                     <span>{faq.question}</span>
                   </h3>
                   <svg
@@ -268,7 +262,7 @@ const Landing = () => {
             </p>
             <button
               onClick={() => navigate('/login')}
-              className="px-8 py-4 bg-gradient-to-b from-yellow-500 to-yellow-400 text-white font-bold rounded-xl text-lg hover:shadow-2xl transition-all duration-200 transform hover:scale-105 inline-flex items-center space-x-3"
+              className="px-8 py-4 bg-gradient-to-b from-purple-600 to-purple-500 text-white font-bold rounded-xl text-lg hover:shadow-2xl transition-all duration-200 transform hover:scale-105 inline-flex items-center space-x-3"
             >
               <span>Get Started Now</span>
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -284,15 +278,16 @@ const Landing = () => {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center space-x-3 mb-4 md:mb-0">
-              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-yellow-400 to-yellow-500 flex items-center justify-center">
+              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
                 <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
                 </svg>
               </div>
-              <span className="text-lg font-bold text-gray-900">Real Estate CRM</span>
+              <span className="text-lg font-bold text-gray-900">College Management</span>
             </div>
             <p className="text-sm text-gray-600">
-              © 2026 Real Estate CRM. All rights reserved.
+              © 2026 College Management. All rights reserved.
             </p>
           </div>
         </div>

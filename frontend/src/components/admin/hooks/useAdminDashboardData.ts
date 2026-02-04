@@ -1,7 +1,10 @@
-import { useState, useEffect } from 'react';
-import { dashboardAPI } from '../../../services/api';
-import { DashboardStats } from '../../../types';
-import { AgentOverview } from '../AgentOverviewTable';
+import { useState, useEffect } from "react";
+import { dashboardAPI } from "../../../services/api";
+import { DashboardStats } from "../../../types";
+import { AgentOverview } from "../AgentOverviewTable";
+
+const CACHE_KEY = "adminDashboardCache:v1";
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
 export const useAdminDashboardData = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -9,28 +12,59 @@ export const useAdminDashboardData = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchStats = async () => {
-    try {
-      const data = await dashboardAPI.getStats();
-      setStats(data);
-    } catch (error) {
-      console.error('Failed to fetch stats:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    return dashboardAPI.getStats();
   };
 
   const fetchAgentOverview = async () => {
+    return dashboardAPI.getAgentOverview();
+  };
+
+  const loadFromCache = () => {
     try {
-      const data = await dashboardAPI.getAgentOverview();
-      setAgentOverview(data);
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (!cached) return false;
+      const parsed = JSON.parse(cached) as {
+        timestamp: number;
+        stats: DashboardStats | null;
+        agentOverview: AgentOverview[];
+      };
+      if (Date.now() - parsed.timestamp > CACHE_TTL_MS) return false;
+      setStats(parsed.stats);
+      setAgentOverview(parsed.agentOverview || []);
+      setIsLoading(false);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const refreshData = async (showLoader: boolean) => {
+    try {
+      if (showLoader) setIsLoading(true);
+      const [statsData, overviewData] = await Promise.all([
+        fetchStats(),
+        fetchAgentOverview(),
+      ]);
+      setStats(statsData);
+      setAgentOverview(overviewData);
+      localStorage.setItem(
+        CACHE_KEY,
+        JSON.stringify({
+          timestamp: Date.now(),
+          stats: statsData,
+          agentOverview: overviewData,
+        }),
+      );
     } catch (error) {
-      console.error('Failed to fetch agent overview:', error);
+      console.error("Failed to fetch admin dashboard data:", error);
+    } finally {
+      if (showLoader) setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchStats();
-    fetchAgentOverview();
+    const hasCache = loadFromCache();
+    refreshData(!hasCache);
   }, []);
 
   return {
@@ -38,6 +72,6 @@ export const useAdminDashboardData = () => {
     agentOverview,
     isLoading,
     fetchStats,
-    fetchAgentOverview
+    fetchAgentOverview,
   };
 };

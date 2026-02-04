@@ -23,10 +23,9 @@ export const useDashboardData = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const [statsData, allLeads, allPendingWorks, pendingWorksFromYesterday] = await Promise.all([
+      const [statsData, allLeads, pendingWorksFromYesterday] = await Promise.all([
         dashboardAPI.getStats(),
         leadsAPI.getLeads(),
-        worksAPI.getWorks().catch(() => []),
         worksAPI.getPendingWorksFromYesterday().catch(() => [])
       ]);
       
@@ -96,9 +95,13 @@ export const useDashboardData = () => {
       // The reminder (pending_work with critical priority) should appear first
       const sortedNews = news
         .sort((a, b) => {
-          const priorityOrder: any = { 'critical': 3, 'high': 2, 'normal': 1 };
-          const aPriority = priorityOrder[a.priority] || 0;
-          const bPriority = priorityOrder[b.priority] || 0;
+          const priorityOrder: Record<NonNullable<NewsItem['priority']>, number> = {
+            critical: 3,
+            high: 2,
+            normal: 1,
+          };
+          const aPriority = priorityOrder[a.priority ?? 'normal'] || 0;
+          const bPriority = priorityOrder[b.priority ?? 'normal'] || 0;
           
           if (aPriority !== bPriority) {
             return bPriority - aPriority;

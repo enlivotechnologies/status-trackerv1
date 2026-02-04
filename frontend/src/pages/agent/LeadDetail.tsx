@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Layout from '../../components/common/Layout';
 import { leadsAPI, notesAPI } from '../../services/api';
-import { Lead, Note, LeadStatus, LeadSource, ActivityLog } from '../../types';
+import { Lead, Note, LeadStatus, ActivityLog } from '../../types';
 
 const LeadDetail = () => {
   const { id } = useParams<{ id: string }>();

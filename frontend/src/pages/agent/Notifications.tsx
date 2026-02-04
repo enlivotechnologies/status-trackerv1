@@ -420,7 +420,7 @@ const Notifications = () => {
                                   {lead.name}
                                 </div>
                                 <div className="text-xs text-gray-500">
-                                  {lead.email || "-"}
+                                  {lead.phone || "-"}
                                 </div>
                               </div>
                             </div>
@@ -522,7 +522,7 @@ const Notifications = () => {
                           </td>
                           <td className="px-4 py-4">
                             <span className="text-sm text-purple-600 font-medium">
-                              {formatDate(college.nextFollowUpDate)}
+                              {formatDate(college.followUpDate)}
                             </span>
                           </td>
                           <td className="px-4 py-4">

@@ -45,7 +45,7 @@ const TodaysLeads = ({ leads, onStatusChange, onDateChange }: TodaysLeadsProps) 
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-100">
-              {leads.map((lead, index) => (
+              {leads.map((lead) => (
                 <tr
                   key={lead.id}
                   className="hover:bg-gray-50/50 transition-colors"

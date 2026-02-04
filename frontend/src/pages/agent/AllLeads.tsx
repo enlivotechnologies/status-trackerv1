@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
 import { leadsAPI } from "../../services/api";
 import { Lead, FollowUpStatus, LeadStatus } from "../../types";
 import {
@@ -39,7 +38,6 @@ const AllLeads = () => {
   const [showDatePicker, setShowDatePicker] = useState<string | null>(null);
   const [showNotification, setShowNotification] = useState<string | null>(null);
   const navigate = useNavigate();
-  const { user } = useAuth();
 
   const CACHE_KEY = "agentAllLeadsCache:v1";
   const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes

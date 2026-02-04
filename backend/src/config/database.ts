@@ -12,13 +12,6 @@ const prisma = globalForPrisma.prisma ?? new PrismaClient({
       url: process.env.DATABASE_URL,
     },
   },
-  // Connection pool configuration for NeonDB
-  // NeonDB requires connection pooling for serverless
-  __internal: {
-    engine: {
-      connectTimeout: 60000, // 60 seconds
-    },
-  },
 });
 
 // Handle connection errors and reconnect

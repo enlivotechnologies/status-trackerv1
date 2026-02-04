@@ -119,7 +119,12 @@ export const getPendingWorksFromYesterday = async (req: AuthRequest, res: Respon
     }
 
     // Fetch all works matching the date criteria
-    let allWorks = [];
+    let allWorks: Array<{
+      id: string;
+      dueDate: Date;
+      lead: { followUpStatus: FollowUpStatus | null } | null;
+      assignedTo: { id: string; name: string; email: string } | null;
+    }> = [];
     try {
       allWorks = await prisma.work.findMany({
         where: baseWhere,

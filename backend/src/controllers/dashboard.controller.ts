@@ -102,7 +102,11 @@ export const getDashboardStats = async (req: AuthRequest, res: Response) => {
     }
 
     // Fetch works with their leads to filter by followUpStatus
-    let allPendingWorks = [];
+    let allPendingWorks: Array<{
+      id: string;
+      dueDate: Date;
+      lead: { followUpStatus: FollowUpStatus | null } | null;
+    }> = [];
     try {
       allPendingWorks = await prisma.work.findMany({
         where: workBaseWhere,
@@ -497,7 +501,11 @@ export const getAgentOverview = async (req: AuthRequest, res: Response) => {
         // 2. dueDate < today (only previous days, not today or future)
         // 3. AND the associated lead's followUpStatus is NOT COMPLETED and NOT NOT_NEGOTIABLE
         // (null followUpStatus is allowed - it means pending)
-        let agentPendingWorks = [];
+        let agentPendingWorks: Array<{
+          id: string;
+          dueDate: Date;
+          lead: { followUpStatus: FollowUpStatus | null } | null;
+        }> = [];
         try {
           agentPendingWorks = await prisma.work.findMany({
             where: {
